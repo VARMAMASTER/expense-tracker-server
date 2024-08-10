@@ -13,7 +13,6 @@ import { AppService } from './app.service';
     }),
     MongooseModule.forRoot(process.env.MONGO_URI),
     AuthModule,
-    // MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [AppController],
   providers: [AppService],
