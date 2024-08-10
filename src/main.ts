@@ -1,5 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
@@ -13,6 +14,7 @@ async function bootstrap() {
 
   // Listen on the specified port and hostname
   await app.listen(process.env.PORT);
+  SpeedInsights;
 }
 
 bootstrap();
