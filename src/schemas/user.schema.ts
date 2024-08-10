@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { HydratedDocument } from 'mongoose';
-import { Role } from 'src/auth/dto/auth.dto';
+import { Role } from '../auth/dto/auth.dto';
 
 export type UserDocument = HydratedDocument<User>;
 
