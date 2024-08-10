@@ -1,5 +1,8 @@
 {
   "version": 2,
+  "env": {
+    "MONGO_URI": "mongodb+srv://nsaikiranvarma:Kingu%40123@cluster0.vkvqh.mongodb.net/expense_tracker?retryWrites=true&w=majority"
+  },
   "builds": [
     {
       "src": "src/main.ts",
