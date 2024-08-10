@@ -1,10 +1,11 @@
+import { Injectable } from '@nestjs/common';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { HydratedDocument } from 'mongoose';
 import { Role } from 'src/auth/dto/auth.dto';
 
 export type UserDocument = HydratedDocument<User>;
-
+@Injectable()
 @Schema({ timestamps: true }) // Adds createdAt and updatedAt timestamps
 export class User {
   @Prop({ required: true, minlength: 1, maxlength: 50 }) // Validation for name length
