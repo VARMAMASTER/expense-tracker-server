@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { Role } from '../auth/dto/auth.dto';
 
 export type UserDocument = HydratedDocument<User>;
@@ -28,8 +28,12 @@ export class User {
   @Prop({ type: String }) // Optional date of birth field
   dateOfBirth?: string;
 
-  @Prop({ required: true, type: String }) // Optional phone number field
+  @Prop({ type: String }) // Optional phone number field
   phoneNumber?: string;
+
+  // Optional: Array of expense references (One-to-Many relationship)
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Expense' }] })
+  expenses?: Types.ObjectId[];
 }
 
 // Create the schema

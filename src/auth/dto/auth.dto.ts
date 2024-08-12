@@ -8,11 +8,7 @@ import {
   IsPhoneNumber,
   Length,
 } from 'class-validator';
-
-export enum Role {
-  USER = 'user',
-  ADMIN = 'admin',
-}
+import { Role } from '../../utils/enums';
 
 export class createUserDto {
   @IsString()
@@ -56,3 +52,4 @@ export class loginUserDto {
   @Length(6, 20)
   password: string;
 }
+export { Role };
