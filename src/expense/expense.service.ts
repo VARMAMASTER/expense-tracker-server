@@ -57,7 +57,21 @@ export class ExpenseService {
     return `This action returns a #${id} expense`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} expense`;
+  async remove(id: string): Promise<any> {
+    try {
+      if (!Types.ObjectId.isValid(id)) {
+        throw new HttpException('Invalid expense ID', 400);
+      }
+
+      const result = await this.expenseModel.deleteOne({ _id: id }).exec();
+      if (result.deletedCount === 0) {
+        throw new HttpException('Expense not found', 404);
+      } else {
+        return { success: true, message: 'Expense deleted successfully' };
+      }
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status || 500);
+    }
   }
 }
