@@ -12,7 +12,7 @@ export class ExpenseService {
     @InjectModel(Expense.name)
     private readonly expenseModel: Model<ExpenseDocument>,
   ) {}
-  async create(body: CreateExpenseDto): Promise<Expense> {
+  async create(body: CreateExpenseDto): Promise<any> {
     try {
       // Ensure the user exists before creating the expense
       const user = await this.userModel.findById(body.userId);
@@ -26,13 +26,17 @@ export class ExpenseService {
       });
 
       const expense = await createExpense.save();
-      return expense;
+      return {
+        success: true,
+        message: 'Expense created successfully',
+        data: expense,
+      };
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, error.status || 500);
     }
   }
-  async findAllByUser(userId: string): Promise<Expense[]> {
+  async findAllByUser(userId: string): Promise<any> {
     try {
       // Validate the userId as a valid ObjectId
       if (!Types.ObjectId.isValid(userId)) {
@@ -46,7 +50,9 @@ export class ExpenseService {
       }
 
       // Find all expenses by the user
-      return this.expenseModel.find({ user: userId }).exec();
+      const expenses = await this.expenseModel.find({ user: userId }).exec();
+
+      return { expenses: expenses, count: expenses.length };
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, error.status || 500);
