@@ -37,7 +37,7 @@ export class AppService {
         <body>
           <div class="container">
             <h1>API Status</h1>
-            <p>The API is working perfectly!</p>
+            <p>The Meals-App API is working perfectly!</p>
           </div>
         </body>
       </html>
