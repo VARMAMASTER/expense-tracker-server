@@ -20,7 +20,7 @@ import { AppService } from './app.service';
     }),
     CacheModule.register({
       isGlobal: true, // Optional: Set to true if you want the cache to be available globally
-      ttl: 100, // seconds, optional (default is 5 seconds)
+      ttl: 5, // seconds, optional (default is 5 seconds)
       max: 100, // maximum number of items in cache, optional
     }),
     RouterModule.register([
