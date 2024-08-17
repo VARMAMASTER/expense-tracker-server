@@ -14,7 +14,7 @@ import { AppService } from './app.service';
       isGlobal: true,
       envFilePath: ['.env'],
     }),
-    MongooseModule.forRoot(process.env.MONGO_URI),
+    MongooseModule.forRoot(process.env.MONGO_URI_Expense_TRACKER),
     AuthModule,
     UserModule,
     ExpenseModule,
