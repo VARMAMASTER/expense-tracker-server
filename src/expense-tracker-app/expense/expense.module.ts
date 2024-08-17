@@ -7,10 +7,13 @@ import { ExpenseService } from './expense.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Expense.name, schema: ExpenseSchema },
-      { name: User.name, schema: UserSchema },
-    ]),
+    MongooseModule.forFeature(
+      [
+        { name: Expense.name, schema: ExpenseSchema },
+        { name: User.name, schema: UserSchema },
+      ],
+      'expense-tracker',
+    ),
   ],
   controllers: [ExpenseController],
   providers: [ExpenseService],

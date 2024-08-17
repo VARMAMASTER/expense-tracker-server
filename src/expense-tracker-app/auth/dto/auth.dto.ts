@@ -52,4 +52,3 @@ export class loginUserDto {
   @Length(6, 20)
   password: string;
 }
-export { Role };

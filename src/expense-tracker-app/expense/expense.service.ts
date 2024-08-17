@@ -8,8 +8,9 @@ import { CreateExpenseDto } from './dto/expense.dto';
 @Injectable()
 export class ExpenseService {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-    @InjectModel(Expense.name)
+    @InjectModel(User.name, 'expense-tracker')
+    private readonly userModel: Model<UserDocument>,
+    @InjectModel(Expense.name, 'expense-tracker')
     private readonly expenseModel: Model<ExpenseDocument>,
   ) {}
   async create(body: CreateExpenseDto): Promise<any> {

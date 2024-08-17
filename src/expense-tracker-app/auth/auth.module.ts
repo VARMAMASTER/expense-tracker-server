@@ -20,10 +20,13 @@ import { JwtStrategy } from './jwt/jwt.strategy';
     }),
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET,
+      secret: process.env.JWT_SECRET_Expense_TRACKER,
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
     }),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature(
+      [{ name: User.name, schema: UserSchema }],
+      'expense-tracker',
+    ),
   ],
   exports: [AuthService],
   controllers: [AuthController],

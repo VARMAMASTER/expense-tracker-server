@@ -15,7 +15,8 @@ import { createUserDto, loginUserDto } from './dto/auth.dto';
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    @InjectModel(User.name, 'expense-tracker')
+    private readonly userModel: Model<UserDocument>,
   ) {}
 
   async signUp(body: createUserDto): Promise<UserDocument | any> {
