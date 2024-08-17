@@ -5,13 +5,13 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS
+  // Enable CORS with a single line configuration
   app.enableCors({ origin: '*' });
 
   // Apply global validation pipe
   app.useGlobalPipes(new ValidationPipe());
 
-  // Listen on the specified port and host
+  // Listen on the specified port and hostname
   await app.listen(process.env.PORT);
 }
 
