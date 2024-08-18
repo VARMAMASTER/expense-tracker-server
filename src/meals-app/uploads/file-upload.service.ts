@@ -1,47 +1,90 @@
-// src/files/files.service.ts
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import {
   getDownloadURL,
   getMetadata,
   ref,
   uploadBytes,
+  UploadMetadata,
 } from 'firebase/storage';
+import { Model } from 'mongoose';
 import { FirebaseService } from '../firebase/firebase.service';
+import { Media, MediaDocument } from '../schemas/media-object.schema';
+import { UploadFileDto } from './dto/upload-file';
 
 @Injectable()
 export class FileUploadService {
-  constructor(private readonly firebaseService: FirebaseService) {}
+  constructor(
+    private readonly firebaseService: FirebaseService,
+    @InjectModel(Media.name, 'meals-app')
+    private readonly mediaModel: Model<MediaDocument>,
+  ) {}
 
-  async uploadFile(file: Express.Multer.File): Promise<any> {
-    if (!file) {
-      throw new BadRequestException('No file provided.');
-    }
-
-    if (!file.originalname || !file.buffer) {
+  async uploadFile(
+    file: Express.Multer.File,
+    body: UploadFileDto,
+  ): Promise<any> {
+    if (!file || !file.originalname || !file.buffer) {
       throw new BadRequestException('File is missing required properties.');
     }
 
     try {
-      const storage = this.firebaseService.getStorage();
+      // Upload file to Firebase and get the download URL and metadata
+      const { downloadURL, fileData } = await this.uploadFileToFirebase(file);
 
-      // Specify the directory where you want to store the images
-      const directory = 'dishes';
-      const storageRef = ref(storage, `${directory}/${file.originalname}`);
+      // Save media data to the database
+      const newMedia = await this.saveMediaToDatabase(
+        body,
+        file.originalname,
+        downloadURL,
+      );
 
-      const metadata = {
-        contentType: file.mimetype, // Ensure `file.mimetype` is correctly set
+      // Return the response
+      return {
+        Success: true,
+        message: 'Image uploaded successfully',
+        url: downloadURL,
+        data: fileData,
+        media: newMedia,
       };
-
-      await uploadBytes(storageRef, file.buffer, metadata);
-
-      // Get the download URL for the uploaded file
-      const downloadURL = await getDownloadURL(storageRef);
-      const filedata = await getMetadata(storageRef);
-
-      return { url: downloadURL, data: filedata };
     } catch (error) {
-      // Handle errors that occur during the upload process
-      throw new BadRequestException(`File upload failed: ${error.message}`);
+      console.error(error);
+      throw new HttpException(error.message, error.status);
     }
+  }
+
+  // Abstract function to upload file to Firebase Storage
+  private async uploadFileToFirebase(
+    file: Express.Multer.File,
+  ): Promise<{ downloadURL: string; fileData: any }> {
+    const storage = this.firebaseService.getStorage();
+    const directory = 'dishes'; // Specify the directory
+    const storageRef = ref(storage, `${directory}/${file.originalname}`);
+    const metadata: UploadMetadata = {
+      contentType: file.mimetype,
+    };
+
+    await uploadBytes(storageRef, file.buffer, metadata);
+    const downloadURL = await getDownloadURL(storageRef);
+    const fileData = await getMetadata(storageRef);
+
+    return { downloadURL, fileData };
+  }
+
+  // Abstract function to save media object to the database
+  private async saveMediaToDatabase(
+    body: UploadFileDto,
+    originalFileName: string,
+    fileUrl: string,
+  ): Promise<MediaDocument> {
+    const newMedia = new this.mediaModel({
+      CategoryId: body.CategoryId,
+      type: body.type,
+      subType: body.subType,
+      fileUrl,
+      originalFileName,
+    });
+
+    return newMedia.save(); // Save the media object to the database
   }
 }
