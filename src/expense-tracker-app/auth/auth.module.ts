@@ -11,7 +11,7 @@ import { JwtStrategyExpenseTracker } from './jwt/jwt.strategy';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: false,
+      isGlobal: true,
       envFilePath: ['.env'],
     }),
     PassportModule.register({ defaultStrategy: 'jwt-expense-tracker' }),

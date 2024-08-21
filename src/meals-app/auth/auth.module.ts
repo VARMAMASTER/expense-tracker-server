@@ -11,6 +11,7 @@ import JwtStrategyMealsApp from './jwt/jwt.strategy';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       envFilePath: ['.env'],
     }),
     PassportModule.register({ defaultStrategy: 'jwt-meals-app' }),
