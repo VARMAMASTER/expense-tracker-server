@@ -9,3 +9,15 @@ export enum Category {
   LEISURE = 'Leisure',
   WORK = 'Work',
 }
+
+export enum Affordability {
+  Affordable = 'affordable',
+  Pricey = 'pricey',
+  Luxurious = 'luxurious',
+}
+
+export enum Complexity {
+  Simple = 'simple',
+  Challenging = 'challenging',
+  Hard = 'hard',
+}

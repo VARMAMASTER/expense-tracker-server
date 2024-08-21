@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { RouterModule } from '@nestjs/core/router/router-module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from '../auth/auth.module';
+import { CategoryModule } from '../category/category.module';
 import { FirebaseModule } from '../firebase/firebase.module';
 import { FileUploadModule } from '../uploads/file-upload.module';
 import { AppController } from './app.controller';
@@ -33,12 +34,14 @@ import { AppService } from './app.service';
             path: 'files',
             module: FileUploadModule,
           },
+          { path: 'category', module: CategoryModule },
         ],
       },
     ]),
     AuthModule,
     FirebaseModule,
     FileUploadModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

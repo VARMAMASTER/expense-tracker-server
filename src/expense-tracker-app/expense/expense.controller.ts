@@ -7,10 +7,10 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
+import { JwtAuthGuardExpenseTracker } from '../auth/jwt/jwt-auth.guard';
 import { CreateExpenseDto } from './dto/expense.dto';
 import { ExpenseService } from './expense.service';
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuardExpenseTracker)
 @Controller('')
 export class ExpenseController {
   constructor(private readonly expenseService: ExpenseService) {}
