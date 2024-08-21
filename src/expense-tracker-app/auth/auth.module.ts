@@ -14,8 +14,12 @@ import { JwtStrategyExpenseTracker } from './jwt/jwt.strategy';
       isGlobal: true,
       envFilePath: ['.env'],
     }),
-    PassportModule.register({ defaultStrategy: 'jwt-expense-tracker' }),
+    PassportModule.register({
+      defaultStrategy: 'jwt-expense-tracker',
+      global: true,
+    }),
     JwtModule.register({
+      global: true,
       secret: process.env.JWT_SECRET_EXPENSE_TRACKER,
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
     }),

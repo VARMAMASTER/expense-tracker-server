@@ -14,8 +14,12 @@ import JwtStrategyMealsApp from './jwt/jwt.strategy';
       isGlobal: true,
       envFilePath: ['.env'],
     }),
-    PassportModule.register({ defaultStrategy: 'jwt-meals-app' }),
+    PassportModule.register({
+      defaultStrategy: 'jwt-meals-app',
+      isGlobal: true,
+    }),
     JwtModule.register({
+      global: true,
       secret: process.env.JWT_SECRET_MEALS_APP,
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
     }),
