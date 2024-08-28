@@ -21,3 +21,14 @@ export enum Complexity {
   Challenging = 'challenging',
   Hard = 'hard',
 }
+
+export enum Taste {
+  SWEET = 'sweet',
+  SOUR = 'sour',
+  SALTY = 'salty',
+  BITTER = 'bitter',
+  UMAMI = 'umami',
+  SPICY = 'spicy',
+  ASTRINGENT = 'astringent',
+  FATTY = 'fatty',
+}

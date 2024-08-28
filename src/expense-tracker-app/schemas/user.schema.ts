@@ -1,56 +1,53 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
-import { HydratedDocument, Types } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 import { Role } from '../utils/enums';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema({ timestamps: true }) // Adds createdAt and updatedAt timestamps
+@Schema({ timestamps: true })
 export class User {
-  @Prop({ required: true, minlength: 1, maxlength: 50 }) // Validation for name length
+  @Prop({ required: true, minlength: 1, maxlength: 50 })
   name: string;
 
-  @Prop({ required: true, unique: true, maxlength: 100 }) // Ensure email is unique and valid
+  @Prop({ required: true, unique: true, maxlength: 100 })
   email: string;
 
-  @Prop({ required: true, minlength: 6, maxlength: 20 }) // Ensure password length
+  @Prop({ required: true, minlength: 6 })
   password: string;
 
-  @Prop({ enum: Role, default: Role.USER }) // Ensure role is one of the predefined values
+  @Prop({ enum: Role, default: Role.USER })
   role: Role;
 
-  @Prop({ default: true }) // Default isActive to true
+  @Prop({ default: true })
   isActive: boolean;
 
-  @Prop({ type: String, maxlength: 255 }) // Optional address field
+  @Prop({ type: String, maxlength: 255 })
   address?: string;
 
-  @Prop({ type: String }) // Optional date of birth field
+  @Prop({ type: String })
   dateOfBirth?: string;
 
-  @Prop({ type: String }) // Optional phone number field
+  @Prop({ type: String })
   phoneNumber?: string;
 
-  // Optional: Array of expense references (One-to-Many relationship)
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Expense' }] })
-  expenses?: Types.ObjectId[];
+  @Prop({ type: [String], ref: 'Expense', default: [] }) // Initialize as an
+  expenses: string[];
 }
 
 // Create the schema
 export const UserSchema = SchemaFactory.createForClass(User);
 
-// Add the pre-save hook to hash the password before saving
 UserSchema.pre<UserDocument>('save', async function (next) {
-  // Check if the password field is modified or new
   if (this.isModified('password') || this.isNew) {
     try {
-      const salt = await bcrypt.genSalt(10); // Generate salt with 10 rounds
-      this.password = await bcrypt.hash(this.password, salt); // Hash the password
-      next(); // Call the next middleware
+      const salt = await bcrypt.genSalt(10);
+      this.password = await bcrypt.hash(this.password, salt);
+      next();
     } catch (error) {
-      next(error); // Pass the error to the next middleware
+      next(error);
     }
   } else {
-    next(); // Call the next middleware if the password is not modified
+    next();
   }
 });

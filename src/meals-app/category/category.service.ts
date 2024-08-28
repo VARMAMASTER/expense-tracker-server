@@ -8,6 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category, CategoryDocument } from '../schemas/category.schema';
 import { CreateCategoryDto } from './dto/category.dto';
+import { Taste } from '../utils/enums';
 
 @Injectable()
 export class CategoryService {
@@ -33,13 +34,13 @@ export class CategoryService {
   }
 
   // Find all categories
-  async findAll(): Promise<Category[]> {
-    try {
-      return await this.categoryModel.find().exec();
-    } catch (error) {
-      throw new InternalServerErrorException('Failed to fetch categories');
-    }
-  }
+  // async findAll(): Promise<Category[]> {
+  //   try {
+  //     return await this.categoryModel.find().exec();
+  //   } catch (error) {
+  //     throw new InternalServerErrorException('Failed to fetch categories');
+  //   }
+  // }
 
   // Find a category by ID
   async findOne(id: string): Promise<Category> {
@@ -53,6 +54,27 @@ export class CategoryService {
         throw new NotFoundException(`Category with ID ${id} not found`);
       }
       return category;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      } else {
+        throw new InternalServerErrorException('Failed to fetch category');
+      }
+    }
+  }
+
+  async findAll(): Promise<any> {
+    try {
+      const mockDatabase = [
+        Taste.SWEET,
+        Taste.SOUR,
+        Taste.SALTY,
+        Taste.SPICY,
+        Taste.UMAMI,
+        Taste.BITTER,
+        Taste.ASTRINGENT,
+      ];
+      return { success: true, data: mockDatabase };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;

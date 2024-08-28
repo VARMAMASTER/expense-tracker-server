@@ -1,26 +1,25 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Types } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 import { Category } from '../utils/enums';
 
 export type ExpenseDocument = HydratedDocument<Expense>;
 
-@Schema({ timestamps: true }) // Adds createdAt and updatedAt timestamps
+@Schema({ timestamps: true })
 export class Expense {
-  @Prop({ required: true, minlength: 1, maxlength: 100 }) // Validation for title length
+  @Prop({ required: true, minlength: 1, maxlength: 100 })
   title: string;
 
-  @Prop({ required: true, min: 0 }) // Ensure amount is a positive number
+  @Prop({ required: true, min: 0 })
   amount: number;
 
-  @Prop({ required: true }) // Ensure date is provided
+  @Prop({ required: true })
   date: Date;
 
-  @Prop({ required: true, enum: Category }) // Ensure category is one of the predefined values
+  @Prop({ required: true, enum: Category })
   category: Category;
 
-  // Add a reference to the User schema (One-to-Many relationship)
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-  user: Types.ObjectId;
+  @Prop({ type: String, ref: 'User', required: true }) // Store user as a string
+  user: string;
 }
 
 // Create the schema

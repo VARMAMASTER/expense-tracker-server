@@ -6,9 +6,6 @@ export type MealDocument = HydratedDocument<Meal>;
 
 @Schema({ timestamps: true }) // Adds createdAt and updatedAt timestamps
 export class Meal {
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Category' }], required: true }) // List of Category references
-  categories: Types.ObjectId[];
-
   @Prop({ type: String, required: true }) // Title of the meal
   title: string;
 

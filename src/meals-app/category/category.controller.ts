@@ -11,14 +11,19 @@ export class CategoryController {
     return this.categoryService.create(body);
   }
 
-  @Get()
-  findAll() {
-    return this.categoryService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.categoryService.findAll();
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoryService.findOne(id);
+  }
+
+  @Get('/')
+  findAllTaste() {
+    return this.categoryService.findAll();
   }
 
   @Delete(':id')

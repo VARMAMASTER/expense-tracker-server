@@ -13,30 +13,42 @@ export class ExpenseService {
     @InjectModel(Expense.name, 'expense-tracker')
     private readonly expenseModel: Model<ExpenseDocument>,
   ) {}
+
   async create(body: CreateExpenseDto): Promise<any> {
     try {
       // Ensure the user exists before creating the expense
       const user = await this.userModel.findById(body.userId);
+
       if (!user) {
         throw new HttpException('User not found', 404);
       }
 
-      const createExpense = new this.expenseModel({
+      // Create the new Expense document with the user's ID as a string
+      const newExpense = new this.expenseModel({
         ...body,
-        user: body.userId, // Set the user field with userId
+        user: body.userId, // Store user ID as a string
       });
 
-      const expense = await createExpense.save();
+      const savedExpense = await newExpense.save();
+
+      // Add the saved Expense's ObjectId to the user's expenses array as a string
+      user.expenses.push(savedExpense?._id?.toString());
+      await user.save();
+
+      // Populate the user field in the savedExpense before returning
+      await savedExpense.populate('user');
+
       return {
         success: true,
         message: 'Expense created successfully',
-        data: expense,
+        data: savedExpense, // Return the populated Expense
       };
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, error.status || 500);
     }
   }
+
   async findAllByUser(userId: string): Promise<any> {
     try {
       // Validate the userId as a valid ObjectId
