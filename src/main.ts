@@ -18,10 +18,6 @@ async function bootstrap() {
     }),
   );
 
-  // API EncryptionService
-  // const encryptionService = new CryptoService();
-  // app.useGlobalInterceptors(new EncryptionInterceptor(encryptionService));
-
   await app.listen(process.env.SERVER_PORT || 3000);
 }
 bootstrap();
